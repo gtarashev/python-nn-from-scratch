@@ -1,0 +1,4 @@
+# numpy for all of the maths
+numpy
+# pandas for reading csv (datasets)
+pandas
