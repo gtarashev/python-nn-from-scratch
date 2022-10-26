@@ -34,7 +34,7 @@ MANIFEST
 *.spec
 
 # The database
-archive/
+archive/*
 
 # Installer logs
 pip-log.txt
