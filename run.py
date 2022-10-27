@@ -30,10 +30,11 @@ def load_data(filepath):
     random.shuffle(data)
 
     # transpose the data so each column is an example and not each row
-    data.T
+    data = data.T
     # first element will always be the label for the example
     trainY = data[0]
-    trainX = data[1:n]
+    # the rest of the data will be all of the examples
+    trainX = data[1:]
 
 # ======================
 # MAIN
