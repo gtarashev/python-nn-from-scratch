@@ -27,9 +27,9 @@ $L_h = g_{ReLU}(Z_h)$.
 
 Then, to get the output variables we can use:
 
-$y=b_0 \sum ^m_{i=1} (g_{ReLU}(z_i) + b_i)$
+$y=b_0 + \sum ^m_{i=1} (g_{ReLU}(z_i) + b_i)$
 
-where $Z_{out} = \{y_1, y_2, ..., y_n\}, and finally activate the neurons to get: $L_{out} = g_{softmax}(Z_{out})$
+where $Z_{out} = \{y_1, y_2, ..., y_n\}$, and finally activate the neurons to get: $L_{out} = g_{softmax}(Z_{out})$
 
 
 ## Requirements 
