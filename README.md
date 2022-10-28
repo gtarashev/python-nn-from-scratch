@@ -18,8 +18,19 @@ __NOTE: GitHub uses latex syntax for inline maths, the syntax is correct (tested
  * $b_0$: the bias
 
 #### Predicting (Forward Propagation)
-To get a prediction out of the network, I will be using forward propagation, specifically with ReLU as my activation function for my hidden layer and softmax for my output layer. Here's the maths:
-$Z_h = b_0 + \sum ^{m} _{i=1} (x _i + b_i )$
+To get a prediction out of the network, I will be using forward propagation, with ReLU for the hidden layer and softmax for the output layer. I will use ReLU because it acts like a linear function but it isn't, meaning that complex features can be learned and I can also use gradient descent for my backpropagation. I will be using softmax for the output layer because it is great for multi-class classification problems, which is exactly what I am doing here, another bonus is that softmax will give me a confidence (out of 1) for the given prediction. Here is the maths for forward propagation, starting with the equation for the latent variables:
+
+$z = b_0 + \sum ^{m}_{i=1} (x_i + b_i )$
+
+and $Z_h = \{z_1, z_2, ..., z_n\}$, also:
+$L_h = g_{ReLU}(Z_h)$.
+
+Then, to get the output variables we can use:
+
+$y=b_0 \sum ^m_{i=1} (g_{ReLU}(z_i) + b_i)$
+
+where $Z_{out} = \{y_1, y_2, ..., y_n\}, and finally activate the neurons to get: $L_{out} = g_{softmax}(Z_{out})$
+
 
 ## Requirements 
 The requirements for the project are:
