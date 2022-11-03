@@ -14,8 +14,8 @@ __NOTE: GitHub uses latex syntax for inline maths, the syntax is correct (tested
 ### Syntax (note the layer is the list of activated latent variables):
  * $X$: The inputs
  * $Y$: The outputs
- * $L_{in}$: the input layer
- * $L_{out}$: the output layer
+ * $L_{i}$: the input layer
+ * $L_{o}$: the output layer
  * $L_h$: the hidden layer (there will be only one)
  * $\sigma_x$: activation function where $x$ signifies the actual function itself
  * $z$: the latent variables
@@ -37,16 +37,34 @@ Then, to get the output variables we can use:
 
 $y=b_0 + \sum ^m_{i=1} (g_{ReLU}(z_i) * b_i)$
 
-where $Z_{out} = \{y_1, y_2, ..., y_n\}$, and finally activate the neurons to get: $L_{out} = g_{softmax}(Z_{out})$
+where $Z_{o} = \{y_1, y_2, ..., y_n\}$, and finally activate the neurons to get: $L_{o} = g_{softmax}(Z_{o})$
 
 
 #### Learning (Backward Propagation + Parameter Updating)
-For the network to learn, I will be using backwards propagation. To get the difference between our prediction and the actual labels we can use:
+To enable the neural network to learn, I will use gradient descend to adjust the weights, this is one of the reasons that I picked ReLU for my activation function. The main function is:
 
-$dZ_{out} = L_{out} - Y$
+$\theta _j <- \theta _ j - \alpha \frac{\delta C}{\delta \theta _j}$
 
-$dW_{out} = \frac{dZ_{out}L_{h} ^\intercal}{m}$, where $m$ is the number of fatures and
+where $\theta_j$ is the $j$-th parameter and $C$ is the cost or error and $\alpha$ is the learning rate. The actual adapted equations are:
 
-$dB_h = \frac{\sum{dZ_h}}{m}$ for the bias, then
+$\delta Z_o = A_o - Y$
 
-$dZ_h = W_{out} ^\intercal dZ_{out} \cdot g' _ {ReLU}()$
+$\delta W_o = \frac{\delta Z_o A_h ^\intercal}{m}$
+
+$\delta B_o = \frac{\sum \delta Z_o}{m}$
+
+$\delta Z_h = W_h ^\intercal \delta Z_h \cdot g' _{ReLU}(z_h)$
+
+$\delta W_h = \frac{\delta Z_h A_i ^\intercal}{m}$
+
+$\delta B_h = \frac{\sum \delta Z_h}{m}$
+
+and then the parameters are updated with the following equations:
+
+$W_o <- W_o - \alpha \delta W_o$
+
+$B_o <- B_o - \alpha \delta B_o$
+
+$W_h <- W_h - \alpha \delta W_h$
+
+$B_h <- B_h - \alpha \delta B_h$
