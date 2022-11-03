@@ -34,7 +34,7 @@ def load_data(filepath):
     # first element will always be the label for the example
     setY = data[0]
     # the rest of the data will be all of the examples
-    setX = data[1:]
+    setX = data[1:] / 255 # have to divide or the numbers are too big otherwise
 
     # finally, return the x and y data, realised i also need m for back prop
     return setX, setY, m
@@ -83,7 +83,6 @@ def forward_propagation(X, W12, W23, b12, b23):
     # get the output neurons
     Z3 = W23.dot(L2) + b23
     # activate the output neurons
-    print(Z3)
     L3 = softmax(Z3)
 
     # finally return the layers and latent variables
@@ -163,11 +162,15 @@ def gradient_descent(X, Y, W12, W23, b12, b23, m, alpha, generations):
         # update the parameters
         b12, b23, W12, W23 = update_parameters(b12, b23, W12, W23, db12, db23, dW12, dW23, m, alpha)
 
-        # every 100th generation print the accuracy
-        if i % 100 == 0:
+        # every 99th generation print the accuracy (otherwise it skips out the last 100 in the print statement)
+        if i % 99 == 0:
             # get the actual predictions
             predictions = get_predictions(L3)
             print(f"Iteration: {i}\nAccuracy: {get_accuracy(predictions, Y):.2f}\n\t-----------")
+
+    # finally, return the parameters
+    return W12, W23, b12, b23
+
 
 # ======================
 # MAIN
