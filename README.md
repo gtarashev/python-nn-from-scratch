@@ -76,4 +76,4 @@ $B_h \leftarrow B_h - \alpha \delta B_h$
 ## Sample output
 I have completed a run, with $\alpha = 0.05$, to show what the output should look like (numbers might be different due to difference in parameter initialisation):
 
-![alt text](https://github.com/gtarashev/python-nn-from-scratch/blob/devel/image.jpg?raw=true)
+![alt text](https://github.com/gtarashev/python-nn-from-scratch/blob/devel/sample_output_0.05alpha.png?raw=true)
