@@ -8,6 +8,9 @@ The requirements for the project are:
 
 They can be installed using `pip install -r requirements.txt`
 
+## Running
+To run the program simply run `python3 run.py`
+
 ## Network Structure
 __NOTE: GitHub uses latex syntax for inline maths, the syntax is correct (tested in latex) but my browser is not displaying some of it correctly__
 
@@ -68,3 +71,9 @@ $B_o \leftarrow B_o - \alpha \delta B_o$
 $W_h \leftarrow W_h - \alpha \delta W_h$
 
 $B_h \leftarrow B_h - \alpha \delta B_h$
+
+
+## Sample output
+I have completed a run, with $\alpha = 0.05$, to show what the output should look like (numbers might be different due to difference in parameter initialisation):
+
+![alt text](https://github.com/gtarashev/python-nn-from-scratch/blob/devel/image.jpg?raw=true)
