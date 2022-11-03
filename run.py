@@ -36,8 +36,8 @@ def load_data(filepath):
     # the rest of the data will be all of the examples
     setX = data[1:]
 
-    # finally, return the x and y data
-    return setX, setY
+    # finally, return the x and y data, realised i also need m for back prop
+    return setX, setY, m
 
 # ----------------------------------------------
 
@@ -46,14 +46,14 @@ def load_data(filepath):
 def initialise_parameters():
     # note a variable between the layers x and y is labeled as <var>xy
     # weights
-    w12 = np.random.rand(10, 784)   - 0.5
-    w23 = np.random.rand(10, 10)    - 0.5
+    W12 = np.random.rand(10, 784)   - 0.5
+    W23 = np.random.rand(10, 10)    - 0.5
 
     # biases
     b12 = np.random.rand(10, 1)     - 0.5
     b23 = np.random.rand(10, 1)     - 0.5
 
-    return w12, w23, b12, b23
+    return W12, W23, b12, b23
 
 # -----------------------------------------------
 
@@ -75,14 +75,15 @@ def softmax(Z):
 # ------------------------------------------------
 
 # the forward propagation function
-def forward_propagation(X, w12, w23, b12, b23):
+def forward_propagation(X, W12, W23, b12, b23):
     # get the value of the latent variables
-    Z2 = w12.dot(X) + b12
+    Z2 = W12.dot(X) + b12
     # activate the hidden layer
-    L2 = relu(Z12)
+    L2 = relu(Z2)
     # get the output neurons
-    Z3 = w23.dot(L2) + b23
+    Z3 = W23.dot(L2) + b23
     # activate the output neurons
+    print(Z3)
     L3 = softmax(Z3)
 
     # finally return the layers and latent variables
@@ -97,17 +98,97 @@ def get_accuracy(predictions, Y):
 
 
 # a function to get the actual prediction from the output layer
-def get_prediction(predictions) :
+def get_predictions(predictions) :
     # its essentially returning the element with the highest number (which corresponds to confidence)
     return np.argmax(predictions, 0)
+
+# ------------------------------------------------
+
+# a function to calculate all of the deltas 
+def backward_propagation(X, Y, W12, W23, Z2, Z3, L2, L3, m):
+    # FIRST PUT LABEL DATA INTO CORRECT FORMAT
+    # first create an all zeros np array with the right shape
+    normY = np.zeros((Y.size, Y.max() + 1))
+    # put in the values into the new array
+    normY[np.arange(Y.size), Y] = 1
+    # finally just transpose the array
+    normY = normY.T
+
+    # CALCULATE THE VARIABLES (ctrl + f comment in README to find the equation)
+    # \delta Z_o
+    dZ3     = L3 - normY
+    # \delta W_o
+    dW23    = (dZ3.dot(L2.T)) / m
+    # \delta B_o
+    db23    = (np.sum(dZ3)) / m
+    # \delta Z_h
+    dZ2     = W23.T.dot(dZ3) * derrivative_relu(Z2)
+    # \delta W_h
+    dW12     = (dZ2.dot(X.T)) / m
+    # \delta B_h
+    db12    = (np.sum(dZ2)) / m
+
+    # finally, return the values
+    return db12, db23, dW12, dW23
+
+# ------------------------------------------------
+
+# a function to update the parameters given the weghts, deltas and the learning rate
+def update_parameters(b12, b23, W12, W23, db12, db23, dW12, dW23, m, alpha):
+    # INPUT LAYER 
+    # update the weights between first and hidden layers
+    W12     = W12 - (alpha * dW12)
+    # update the bias between first and hidden layers
+    b12     = b12 - (alpha * db12)
+
+    # HIDDEN LAYER
+    # update the weights between hidden and output layers
+    W23     = W23 - (alpha * dW23)
+    # update the bias between the hiddne and output layers
+    b23     = b23 - (alpha * db23)
+
+    # return the updated parameters
+    return b12, b23, W12, W23
+
+# ------------------------------------------------
+
+# performs one step of the gradient descent function: forward -> backward -> update params
+def gradient_descent(X, Y, W12, W23, b12, b23, m, alpha, generations):
+    # loop through generations
+    for i in range(generations):
+        # forward propagation
+        Z2, Z3, L2, L3 = forward_propagation(X, W12, W23, b12, b23)
+        # backward propagation
+        db12, db23, dW12, dW23 = backward_propagation(X, Y, W12, W23, Z2, Z3, L2, L3, m)
+        # update the parameters
+        b12, b23, W12, W23 = update_parameters(b12, b23, W12, W23, db12, db23, dW12, dW23, m, alpha)
+
+        # every 100th generation print the accuracy
+        if i % 100 == 0:
+            # get the actual predictions
+            predictions = get_predictions(L3)
+            print(f"Iteration: {i}\nAccuracy: {get_accuracy(predictions, Y):.2f}\n\t-----------")
 
 # ======================
 # MAIN
 # ======================
 
 def main():
-    load_data(r"./archive/mnist_train.csv")
+    # load training data
+    X, Y, m = load_data(r"./archive/mnist_train.csv")
+    # initialise parameters
+    W12, W23, b12, b23 = initialise_parameters()
 
+    # set the constants
+    alpha = 0.05
+    generations = 1000
+
+    # perform gradient descent
+    W12, W23, b12, b23 = gradient_descent(X, Y, W12, W23, b12, b23, m, alpha, generations)
+
+# ------------------------------------------------
+
+# don't run if imported 
 if __name__ == "__main__":
     main()
 

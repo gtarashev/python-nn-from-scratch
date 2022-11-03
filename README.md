@@ -43,7 +43,7 @@ where $Z_{o} = \{y_1, y_2, ..., y_n\}$, and finally activate the neurons to get:
 #### Learning (Backward Propagation + Parameter Updating)
 To enable the neural network to learn, I will use gradient descend to adjust the weights, this is one of the reasons that I picked ReLU for my activation function. The main function is:
 
-$\theta _j <- \theta _ j - \alpha \frac{\delta C}{\delta \theta _j}$
+$\theta _j \leftarrow \theta _ j - \alpha \frac{\delta C}{\delta \theta _j}$
 
 where $\theta_j$ is the $j$-th parameter and $C$ is the cost or error and $\alpha$ is the learning rate. The actual adapted equations are:
 
@@ -61,10 +61,10 @@ $\delta B_h = \frac{\sum \delta Z_h}{m}$
 
 and then the parameters are updated with the following equations:
 
-$W_o <- W_o - \alpha \delta W_o$
+$W_o \leftarrow W_o - \alpha \delta W_o$
 
-$B_o <- B_o - \alpha \delta B_o$
+$B_o \leftarrow B_o - \alpha \delta B_o$
 
-$W_h <- W_h - \alpha \delta W_h$
+$W_h \leftarrow W_h - \alpha \delta W_h$
 
-$B_h <- B_h - \alpha \delta B_h$
+$B_h \leftarrow B_h - \alpha \delta B_h$
